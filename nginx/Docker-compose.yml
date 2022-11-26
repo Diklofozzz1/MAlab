@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  nginx_api_gateway:
+    container_name: nginx_api_gateway
+    build: ./
+    networks:
+      - backend
+    volumes:
+      - "app_www:/usr/share/nginx/www"
+    ports:
+      - "3000:80"
+    expose:
+      - "80"
+
+networks:
+  backend:
+    driver: bridge
+    external: true
+
+volumes:
+  app_www:
+    external: false

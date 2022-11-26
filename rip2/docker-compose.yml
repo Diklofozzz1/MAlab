@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  db2:
+    container_name: "ripbacke_db_2"
+    image: postgres
+    volumes:
+      - ./container/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=host
+      - POSTGRES_USER=host
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - '5432:5432'
+    networks:
+      - backend
+
+  server2:
+    build: .
+    ports:
+      - '3070:3070'
+    command: ["npm", "start"]
+    depends_on:
+      - db2
+    links:
+      - db2
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
+    external: true
+
+#  rabbitmq_service:
+#    image: "rabbitmq:3-management"
+#    container_name: "rabbitmq"
+#    ports:
+#      - "5672:5672"
+#      - "15672:15672"
+#    volumes:
+#      - ./container/rmq:/data
